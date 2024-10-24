@@ -1,0 +1,19 @@
+"""
+Created on Tue Oct 22 16:36:42 2024
+
+@author: Dell
+"""
+
+import os
+os.environ["OMP_NUM_THREADS"] = '1'
+
+import numpy as np              # cálculo otimizado
+import pandas as pd  
+rais = pd.read_csv('RAIS_VINC_PUB_SUL.txt',
+                        sep = ';',
+                        encoding = "Latin-1",
+                        header = 0)
+
+rais.info()
+
+rais.shape
