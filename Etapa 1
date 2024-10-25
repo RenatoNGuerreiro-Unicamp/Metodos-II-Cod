@@ -17,3 +17,9 @@ rais = pd.read_csv('RAIS_VINC_PUB_SUL.txt',
 rais.info()
 
 rais.shape
+rais = rais[['Motivo Desligamento', 
+              'Escolaridade após 2005',
+              'Idade',  
+              'Sexo Trabalhador',
+              'Raça Cor']]
+rais.info()
