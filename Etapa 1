@@ -18,7 +18,10 @@ rais.info()
 
 rais.shape
 # Limpar as colunas que eu quero
-rais = rais[['Motivo Desligamento', 
+rais = rais[[ 'Faixa Remun Média (SM)',
+             'Tempo Emprego',
+            'Ind Portador Defic',
+              'Motivo Desligamento', 
               'Escolaridade após 2005',
               'Idade',  
               'Sexo Trabalhador',
@@ -27,7 +30,6 @@ rais.info()
 #mostrar um pouco da coluna
 print(rais['Motivo Desligamento'])
 
-#limpar o que eu quero dentro da coluna
-filtro = rais[rais['Motivo Desligamento'].isin([1, 2])]
-print(filtro)
-
+# Deixar apenas os desligamentos sem justa causa
+Njustacausa = rais[rais['Motivo Desligamento'].isin([21])]
+print(Njustacausa)
