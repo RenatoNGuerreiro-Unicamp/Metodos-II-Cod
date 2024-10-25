@@ -17,9 +17,17 @@ rais = pd.read_csv('RAIS_VINC_PUB_SUL.txt',
 rais.info()
 
 rais.shape
+# Limpar as colunas que eu quero
 rais = rais[['Motivo Desligamento', 
               'Escolaridade após 2005',
               'Idade',  
               'Sexo Trabalhador',
               'Raça Cor']]
 rais.info()
+#mostrar um pouco da coluna
+print(rais['Motivo Desligamento'])
+
+#limpar o que eu quero dentro da coluna
+filtro = rais[rais['Motivo Desligamento'].isin([1, 2])]
+print(filtro)
+
