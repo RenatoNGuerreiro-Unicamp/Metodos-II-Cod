@@ -6,6 +6,7 @@ os.environ["OMP_NUM_THREADS"] = '1'
 import numpy as np              # cálculo otimizado
 import pandas as pd             # dataframes e series
 import matplotlib.pyplot as plt # graficos
+import seaborn as sns           # for plot styling
 
 # 3f para considerar nas visualizacoes no console ate 3 decimais para os floats
 pd.options.display.float_format = '{:.3f}'.format
@@ -26,9 +27,8 @@ rais = rais[['Motivo Desligamento',
               'Faixa Etária',  
               'Sexo Trabalhador',
               'Raça Cor',
-              'Ind Portador Defic',
               'Faixa Remun Média (SM)',
-              'Faixa Tempo Emprego',
+              'Faixa Tempo Emprego', # Não vamos analisar, mas vamos utilizar para retirar pessoas que estão no período de experiência (até 3 meses)
               'Tipo Defic']]
 
 rais.info()
@@ -41,14 +41,13 @@ print(rais['Escolaridade após 2005'])
 print(rais['Faixa Etária'])
 print(rais['Sexo Trabalhador'])
 print(rais['Raça Cor'])
-print(rais['Ind Portador Defic'])
 print(rais['Faixa Remun Média (SM)'])
 print(rais['Faixa Tempo Emprego'])
 print(rais['Tipo Defic'])
 
 # Vamos alterar os nomes das variáveis
 var_names = ['MotivoDesligamento', 'Escolaridade', 'Idade', 
-             'Sexo', 'RaçaCor', 'PNE', 
+             'Sexo', 'RaçaCor', 
              'Renda', 'Tempo', 'TipoDeficiencia']
 rais.columns = var_names     # Estamos trocando as variáveis da rais
 
@@ -60,7 +59,6 @@ rais.Escolaridade = rais.Escolaridade.astype('category')
 rais.Idade= rais.Idade.astype('category')
 rais.Sexo = rais.Sexo.astype('category')
 rais.RaçaCor = rais.RaçaCor.astype('category')
-rais.PNE = rais.PNE.astype('category')
 rais.Renda = rais.Renda.astype('category')
 rais.Tempo = rais.Tempo.astype('category')
 rais.TipoDeficiencia = rais.TipoDeficiencia.astype('category')
@@ -69,18 +67,17 @@ rais.TipoDeficiencia = rais.TipoDeficiencia.astype('category')
 rais.describe(include = ['category'])
 
 # Agora analisaremos a consistencia dos dados para observar se existe valores fora do layout da rais
-rais.MotivoDesligamento.value_counts()   # Só iremos utilizar o 21
+rais.MotivoDesligamento.value_counts()   # Só iremos utilizar o 11
 rais.Escolaridade.value_counts()         # Está certo
 rais.Idade.value_counts()                # Retirar o 99 e o 1 (10 até 14 anos não pode trabalhar)
 rais.Sexo.value_counts()                 # Está certo
 rais.RaçaCor.value_counts()              # Retirar 99
-rais.PNE.value_counts()                  # Está certo
 rais.Renda.value_counts()                # Retirar 99
-rais.Tempo.value_counts()                # Retirar 99
+rais.Tempo.value_counts()                # Retirar 1 e 99
 rais.TipoDeficiencia.value_counts()      # Está certo
 
 # Agora iremos realizar a limpeza, retirando os dados mencionados a cima
-query_MotivoDesligamento = rais.MotivoDesligamento == 21
+query_MotivoDesligamento = rais.MotivoDesligamento == 11
 rais = rais[query_MotivoDesligamento]
 
 query_Idade = (rais.Idade != 99) & (rais.Idade !=1)
@@ -92,7 +89,7 @@ rais = rais[query_Renda]
 query_RaçaCor = rais.RaçaCor != 99
 rais = rais[query_RaçaCor]
 
-query_Tempo = rais.Tempo != 99
+query_Tempo = (rais.Tempo != 99) & (rais.Tempo !=1)
 rais = rais[query_Tempo]
 
 # Exibir informações do DataFrame final para verificação
@@ -102,4 +99,39 @@ rais.info()
 rais.isna().sum()
 rais.dropna(inplace = True, axis = 0)
 
+#Aqui é para salvarmos em um arquivo de texto a nossa RAIS, contribuindo para observarmos se houve erros na construção
 rais.to_csv(r'C:\Users\renat\Desktop\Trabalho Métodos II\RAIS_Limpa_Certa.txt', index=False, sep='\t')
+
+# -----------------------------------------------------------------------------------------------------
+
+# Agora vamos iniciar a construção das tabelas para analisar as variáveis que trouxemos
+
+# -----------------------------------------------------------------------------------------------------
+
+# Vamos realizar uma tabela de frequência dos Desligamentos sem justa causa atrelados as variáveis que trouxemos
+
+# Contagem Escolaridade
+rais.Escolaridade.value_counts().sort_index()
+descritivas_Escolaridade = rais.groupby(['Escolaridade'], observed = True)
+type(descritivas_Escolaridade)
+descritivas_Escolaridade  = pd.DataFrame(descritivas_Escolaridade ) # dataframe multi index
+descritivas_Escolaridade.to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\descritivas_Escolaridade.xlsx',  
+                               sheet_name ='Tabela Desligamentos sem Justa Causa relação com Escolaridade',
+                               index = True) # para que salve os indexadores de escolaridade/sexo
+# Contagem Idade
+rais.Idade.value_counts().sort_index()
+
+# Contagem Sexo
+rais.Sexo.value_counts().sort_index()
+
+# Contagem RaçaCor
+rais.RaçaCor.value_counts().sort_index()
+
+# Contagem Renda
+rais.Renda.value_counts().sort_index()
+
+# Contagem TipoDeficiencia
+rais.TipoDeficiencia.value_counts().sort_index()
+
+descritivas_Desligamentos = rais.groupby(['escolaridade', 'sexo'], observed = True)['remuneracao'].mean().round(2)
+
