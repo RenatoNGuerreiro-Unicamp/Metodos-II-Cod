@@ -1,35 +1,68 @@
+# Trabalho Métodos II - Grupo 1
 """
-Created on Tue Oct 22 16:36:42 2024
+Editor Spyder
 
-@author: Dell
+Este é um arquivo de script temporário.
 """
-
 import os
 os.environ["OMP_NUM_THREADS"] = '1'
 
 import numpy as np              # cálculo otimizado
-import pandas as pd  
-rais = pd.read_csv('RAIS_VINC_PUB_SUL.txt',
+import pandas as pd             # dataframes e series
+rais = pd.read_csv('RAIS_VINC_PUB_SUL.txt',          #trocando o nome da variável para rais
                         sep = ';',
                         encoding = "Latin-1",
                         header = 0)
 
-rais.info()
+rais.info()                     # o programa carregar as informações da RAIS
 
-rais.shape
-# Limpar as colunas que eu quero
-rais = rais[[ 'Faixa Remun Média (SM)',
-             'Tempo Emprego',
-            'Ind Portador Defic',
-              'Motivo Desligamento', 
+rais.shape                      # ver o tamanho da RAIS
+
+# Agora vamos limpar as colunas que queremos para a RAIS
+
+rais = rais[['Motivo Desligamento', 
               'Escolaridade após 2005',
-              'Idade',  
+              'Faixa Etária',  
               'Sexo Trabalhador',
-              'Raça Cor']]
-rais.info()
-#mostrar um pouco da coluna
-print(rais['Motivo Desligamento'])
+              'Raça Cor',
+              'Ind Portador Defic',
+              'Faixa Remun Média (SM)',
+              'Faixa Tempo Emprego',
+              'Tipo Defic']]
 
-# Deixar apenas os desligamentos sem justa causa
-Njustacausa = rais[rais['Motivo Desligamento'].isin([21])]
-print(Njustacausa)
+rais.info()
+
+# Aqui você pode observar como cada coluna se manifesta com os indivíduos analisados
+# É só selecionar o que você quer observar e paertar F9
+
+print(rais['Motivo Desligamento'])
+print(rais['Escolaridade após 2005'])
+print(rais['Faixa Etária'])
+print(rais['Sexo Trabalhador'])
+print(rais['Raça Cor'])
+print(rais['Ind Portador Defic'])
+print(rais['Faixa Remun Média (SM)'])
+print(rais['Faixa Tempo Emprego'])
+print(rais['Tipo Defic'])
+
+# Vamos alterar os nomes das variáveis
+var_names = ['MotivoDesligamento', 'Escolaridade', 'Idade', 
+             'Sexo', 'RaçaCor', 'PNE', 
+             'Renda', 'Tempo', 'TipoDeficiencia']
+rais.columns = var_names     # Estamos trocando as variáveis da rais
+
+rais.info()
+
+# Aqui estamos passando para category, pois os números da rais fazem inferência a uma categoria e não a um número diretamente
+rais.MotivoDesligamento = rais.MotivoDesligamento.astype('category')
+rais.Escolaridade = rais.Escolaridade.astype('category')
+rais.Idade= rais.Idade.astype('category')
+rais.Sexo = rais.Sexo.astype('category')
+rais.RaçaCor = rais.RaçaCor.astype('category')
+rais.PNE = rais.PNE.astype('category')
+rais.Renda = rais.Renda.astype('category')
+rais.Tempo = rais.Tempo.astype('category')
+rais.TipoDeficiencia = rais.TipoDeficiencia.astype('category')
+
+# descritivas iniciais para vars categoricas
+rais.describe(include = ['category'])
