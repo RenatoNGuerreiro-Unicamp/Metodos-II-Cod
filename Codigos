@@ -71,7 +71,7 @@ rais.MotivoDesligamento.value_counts()   # Só iremos utilizar o 11
 rais.Escolaridade.value_counts()         # Está certo
 rais.Idade.value_counts()                # Retirar o 99 e o 1 (10 até 14 anos não pode trabalhar)
 rais.Sexo.value_counts()                 # Está certo
-rais.RaçaCor.value_counts()              # Retirar 99
+rais.RaçaCor.value_counts()              # Retirar 99, 3, 5 e 7 (Não estão discriminados na RAIS)
 rais.Renda.value_counts()                # Retirar 99
 rais.Tempo.value_counts()                # Retirar 1 e 99
 rais.TipoDeficiencia.value_counts()      # Está certo
@@ -86,7 +86,7 @@ rais = rais[query_Idade]
 query_Renda = (rais.Renda != 99)
 rais = rais[query_Renda]
 
-query_RaçaCor = rais.RaçaCor != 99
+query_RaçaCor = (rais.RaçaCor != 99) & (rais.RaçaCor !=3) & (rais.RaçaCor !=5) & (rais.RaçaCor !=7)
 rais = rais[query_RaçaCor]
 
 query_Tempo = (rais.Tempo != 99) & (rais.Tempo !=1)
@@ -111,27 +111,46 @@ rais.to_csv(r'C:\Users\renat\Desktop\Trabalho Métodos II\RAIS_Limpa_Certa.txt',
 # Vamos realizar uma tabela de frequência dos Desligamentos sem justa causa atrelados as variáveis que trouxemos
 
 # Contagem Escolaridade
-rais.Escolaridade.value_counts().sort_index()
-descritivas_Escolaridade = rais.groupby(['Escolaridade'], observed = True)
+rais.Escolaridade.value_counts().sort_index() #Para observar os dados da coluna se estão corretos
+descritivas_Escolaridade = rais.Escolaridade.value_counts().sort_index()
 type(descritivas_Escolaridade)
 descritivas_Escolaridade  = pd.DataFrame(descritivas_Escolaridade ) # dataframe multi index
-descritivas_Escolaridade.to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\descritivas_Escolaridade.xlsx',  
-                               sheet_name ='Tabela Desligamentos sem Justa Causa relação com Escolaridade',
-                               index = True) # para que salve os indexadores de escolaridade/sexo
+descritivas_Escolaridade.to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\Tabela Desligamentos em relação a Escolaridade.xlsx')  
+                               
 # Contagem Idade
 rais.Idade.value_counts().sort_index()
+descritivas_Idade = rais.Idade.value_counts().sort_index()
+type(descritivas_Idade)
+descritivas_Idade  = pd.DataFrame(descritivas_Idade ) # dataframe multi index
+descritivas_Idade.to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\Tabela Desligamentos em relação a Idade.xlsx')
 
 # Contagem Sexo
 rais.Sexo.value_counts().sort_index()
+descritivas_Sexo = rais.Sexo.value_counts().sort_index()
+type(descritivas_Sexo)
+descritivas_Sexo  = pd.DataFrame(descritivas_Sexo ) # dataframe multi index
+descritivas_Sexo.to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\Tabela Desligamentos em relação a Sexo.xlsx')
 
 # Contagem RaçaCor
 rais.RaçaCor.value_counts().sort_index()
+descritivas_RaçaCor = rais.Idade.value_counts().sort_index()
+type(descritivas_RaçaCor)
+descritivas_RaçaCor  = pd.DataFrame(descritivas_RaçaCor ) # dataframe multi index
+descritivas_RaçaCor.to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\Tabela Desligamentos em relação a RaçaCor.xlsx')
 
 # Contagem Renda
 rais.Renda.value_counts().sort_index()
+descritivas_Renda = rais.Rensa.value_counts().sort_index()
+type(descritivas_Renda)
+descritivas_Renda  = pd.DataFrame(descritivas_Renda ) # dataframe multi index
+descritivas_Renda.to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\Tabela Desligamentos em relação a Renda.xlsx')
 
 # Contagem TipoDeficiencia
 rais.TipoDeficiencia.value_counts().sort_index()
+descritivas_TipoDeficiencia = rais.TipoDeficiencia.value_counts().sort_index()
+type(descritivas_TipoDeficiencia)
+descritivas_TipoDeficiencia  = pd.DataFrame(descritivas_TipoDeficiencia ) # dataframe multi index
+descritivas_TipoDeficiencia.to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\Tabela Desligamentos em relação a TipoDeficiencia.xlsx')
 
-descritivas_Desligamentos = rais.groupby(['escolaridade', 'sexo'], observed = True)['remuneracao'].mean().round(2)
+
 
