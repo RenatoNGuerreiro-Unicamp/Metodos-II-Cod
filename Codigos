@@ -143,7 +143,7 @@ dados_filtrados = dados_filtrados[dados_filtrados.isin([1, 2, 4, 6, 8, 9])]  # I
 plt.figure(figsize=(10, 8))
 plt.hist(rais.RaçaCor, bins=20, alpha=0.7, color='orange', edgecolor='black', align='mid')
 plt.xlabel('Raça Cor', color='black') # Cor da Escrita eixo x
-plt.ylabel('Frequência', color='black') # Cor da Escrita eixo y
+plt.ylabel('Número de Pessoas', color='black') # Cor da Escrita eixo y
 plt.gca().spines['top'].set_color('black')
 plt.gca().spines['right'].set_color('black')
 plt.gca().spines['left'].set_color('black')
@@ -152,15 +152,49 @@ plt.gca().patch.set_facecolor('white')  # Fundo branco
 plt.gcf().set_facecolor('white')  # Área externa aos eixos em branco
 plt.tick_params(axis='x', colors='black') # Cor dos números do eixo x em preto
 plt.tick_params(axis='y', colors='black') # Cor dos números do eixo y em preto
-plt.xticks([1, 2, 4, 6, 8, 9])
+plt.xticks([1, 2, 4, 6, 8, 9]) # Indicar os números do eixo x que devem aparecer
 plt.show()
 
 # Histograma - Desligamentos por Escolaridade
-dados_filtrados = rais.Escolaridade.dropna() # Inclui apenas os valores desejados
+dados_filtrados = rais.Escolaridade.dropna() 
 plt.figure(figsize=(12, 8))
 plt.hist(rais.Escolaridade, bins=20, alpha=0.7, color='red', edgecolor='black', align='left')
-plt.xlabel('Nível de Escolaridade', color='black') # Cor da Escrita eixo x
-plt.ylabel('Frequência', color='black') # Cor da Escrita eixo y
+plt.xlabel('Nível de Escolaridade', color='black') 
+plt.ylabel('Número de Pessoas', color='black') 
+plt.gca().spines['top'].set_color('black')
+plt.gca().spines['right'].set_color('black')
+plt.gca().spines['left'].set_color('black')
+plt.gca().spines['bottom'].set_color('black')
+plt.gca().patch.set_facecolor('white') 
+plt.gcf().set_facecolor('white') 
+plt.tick_params(axis='x', colors='black') 
+plt.tick_params(axis='y', colors='black') 
+plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11])
+plt.show()
+
+# Histograma - Idade
+dados_filtrados = rais.Idade.dropna() 
+plt.figure(figsize=(10, 8))
+plt.hist(rais.Idade, bins=20, alpha=0.7, color='blue', edgecolor='black', align='mid')
+plt.xlabel('Faixa Etária', color='black') 
+plt.ylabel('Número de Pessoas', color='black') 
+plt.gca().spines['top'].set_color('black')
+plt.gca().spines['right'].set_color('black')
+plt.gca().spines['left'].set_color('black')
+plt.gca().spines['bottom'].set_color('black')
+plt.gca().patch.set_facecolor('white')  
+plt.gcf().set_facecolor('white') 
+plt.tick_params(axis='x', colors='black') 
+plt.tick_params(axis='y', colors='black') 
+plt.xticks([ 2, 3, 4, 5, 6, 7, 8])
+plt.show()
+
+# Histograma - Sexo
+dados_filtrados = rais.Sexo.dropna() # Inclui apenas os valores desejados
+plt.figure(figsize=(5, 8))
+plt.hist(rais.Sexo, bins=5, alpha=0.7, color='green', edgecolor='black', align='mid')
+plt.xlabel('Sexo', color='black') # Cor da Escrita eixo x
+plt.ylabel('Número de Pessoas', color='black') # Cor da Escrita eixo y
 plt.gca().spines['top'].set_color('black')
 plt.gca().spines['right'].set_color('black')
 plt.gca().spines['left'].set_color('black')
@@ -169,5 +203,46 @@ plt.gca().patch.set_facecolor('white')  # Fundo branco
 plt.gcf().set_facecolor('white')  # Área externa aos eixos em branco
 plt.tick_params(axis='x', colors='black') # Cor dos números do eixo x em preto
 plt.tick_params(axis='y', colors='black') # Cor dos números do eixo y em preto
-plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11])
+plt.xticks([ 1, 2])
 plt.show()
+
+# Histograma - Renda
+dados_filtrados = rais.Renda.dropna() 
+plt.figure(figsize=(14, 8))
+plt.hist(rais.Renda, bins=30, alpha=0.7, color='purple', edgecolor='black',align='mid')
+plt.xlabel('Faixa de Renda', color='black') 
+plt.ylabel('Número de Pessoas', color='black') 
+plt.gca().spines['top'].set_color('black')
+plt.gca().spines['right'].set_color('black')
+plt.gca().spines['left'].set_color('black')
+plt.gca().spines['bottom'].set_color('black')
+plt.gca().patch.set_facecolor('white')  
+plt.gcf().set_facecolor('white') 
+plt.tick_params(axis='x', colors='black') 
+plt.tick_params(axis='y', colors='black') 
+plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
+plt.show()
+
+#Antes disso, vamos retirar os casos de pessoas não deficientes para conseguirmos analisar melhor os casos de desligamento por cada categoria de deficiência
+query_TipoDeficiencia = (rais.TipoDeficiencia != 0)
+rais = rais[query_TipoDeficiencia]
+
+# Histograma - Tipo de Deficiência
+dados_filtrados = rais.TipoDeficiencia.dropna() 
+dados_filtrados = dados_filtrados[dados_filtrados.isin([ 1, 2, 3, 4, 5, 6])] 
+plt.figure(figsize=(10, 8))
+plt.hist(rais.TipoDeficiencia, bins=20, alpha=0.7, color='yellow', edgecolor='black', align='mid')
+plt.xlabel('Categorias de Deficiência', color='black') 
+plt.ylabel('Número de Pessoas', color='black') 
+plt.gca().spines['top'].set_color('black')
+plt.gca().spines['right'].set_color('black')
+plt.gca().spines['left'].set_color('black')
+plt.gca().spines['bottom'].set_color('black')
+plt.gca().patch.set_facecolor('white')  
+plt.gcf().set_facecolor('white') 
+plt.tick_params(axis='x', colors='black') 
+plt.tick_params(axis='y', colors='black') 
+plt.xticks([ 1, 2, 3, 4, 5, 6])
+plt.show()
+
+rais.to_csv(r'C:\Users\renat\Desktop\Trabalho Métodos II\Código_Terceira_Entrega.txt', index=False, sep='\t')
