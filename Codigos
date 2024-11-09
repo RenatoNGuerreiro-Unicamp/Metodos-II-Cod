@@ -27,7 +27,6 @@ rais = pd.read_csv('RAIS_VINC_PUB_SUL.txt',          #trocando o nome da variáv
 rais.info()                     # o programa carregar as informações da RAIS
 
 rais.shape                      # ver o tamanho da RAIS
-
 # Aqui você pode observar como cada coluna se manifesta com os indivíduos analisados
 # É só selecionar o que você quer observar e paertar F9
 
@@ -41,9 +40,9 @@ print(rais['Faixa Tempo Emprego'])
 print(rais['Tipo Defic'])
 
 # Vamos alterar os nomes das variáveis
-var_names = ['MotivoDesligamento', 'Escolaridade', 'Idade', 
-             'Sexo', 'RaçaCor', 
-             'Renda', 'Tempo', 'TipoDeficiencia']
+var_names = ['MotivoDesligamento', 'Idade','Renda',
+             'Tempo','Escolaridade', 'RaçaCor', 
+             'Sexo', 'TipoDeficiencia']
 rais.columns = var_names     # Estamos trocando as variáveis da rais
 
 rais.info()
@@ -106,7 +105,8 @@ rais.to_csv(r'C:\Users\renat\Desktop\Trabalho Métodos II\RAIS_Limpa_Certa.txt',
 # Vamos realizar uma tabela de frequência dos Desligamentos sem justa causa atrelados as variáveis que trouxemos
 
 # Contagem Escolaridade
-rais.Escolaridade.value_counts().sort_index() #Para observar os dados da coluna se estão corretos  
+rais.Escolaridade.value_counts().sort_index() #Para observar os dados da coluna se estão corretos
+# Aqui vamos gerar uma tabela do Excel
 rais.Escolaridade.value_counts().sort_index().to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\Tabelas\Tabela Desligamentos em relação a Escolaridade.xlsx')
                             
 # Contagem Idade
@@ -128,3 +128,46 @@ rais.Renda.value_counts().sort_index().to_excel(r'C:\Users\renat\Desktop\Trabalh
 # Contagem TipoDeficiencia
 rais.TipoDeficiencia.value_counts().sort_index()
 rais.TipoDeficiencia.value_counts().sort_index().to_excel(r'C:\Users\renat\Desktop\Trabalho Métodos II\Tabelas\Tabela Desligamentos em relação a TipoDeficiencia.xlsx')
+
+# -----------------------------------------------------------------------------------------------------
+
+# Agora vamos iniciar a construção dos gráficos para analisar as variáveis que trouxemos
+
+# -----------------------------------------------------------------------------------------------------
+
+# Índices compostos relacionando os motivos de desligamento com todos os outros
+
+# Histograma - Desligamentos por RaçaCor
+dados_filtrados = rais.RaçaCor.dropna()
+dados_filtrados = dados_filtrados[dados_filtrados.isin([1, 2, 4, 6, 8, 9])]  # Inclui apenas os valores desejados
+plt.figure(figsize=(10, 8))
+plt.hist(rais.RaçaCor, bins=20, alpha=0.7, color='orange', edgecolor='black', align='mid')
+plt.xlabel('Raça Cor', color='black') # Cor da Escrita eixo x
+plt.ylabel('Frequência', color='black') # Cor da Escrita eixo y
+plt.gca().spines['top'].set_color('black')
+plt.gca().spines['right'].set_color('black')
+plt.gca().spines['left'].set_color('black')
+plt.gca().spines['bottom'].set_color('black')
+plt.gca().patch.set_facecolor('white')  # Fundo branco
+plt.gcf().set_facecolor('white')  # Área externa aos eixos em branco
+plt.tick_params(axis='x', colors='black') # Cor dos números do eixo x em preto
+plt.tick_params(axis='y', colors='black') # Cor dos números do eixo y em preto
+plt.xticks([1, 2, 4, 6, 8, 9])
+plt.show()
+
+# Histograma - Desligamentos por Escolaridade
+dados_filtrados = rais.Escolaridade.dropna() # Inclui apenas os valores desejados
+plt.figure(figsize=(12, 8))
+plt.hist(rais.Escolaridade, bins=20, alpha=0.7, color='red', edgecolor='black', align='left')
+plt.xlabel('Nível de Escolaridade', color='black') # Cor da Escrita eixo x
+plt.ylabel('Frequência', color='black') # Cor da Escrita eixo y
+plt.gca().spines['top'].set_color('black')
+plt.gca().spines['right'].set_color('black')
+plt.gca().spines['left'].set_color('black')
+plt.gca().spines['bottom'].set_color('black')
+plt.gca().patch.set_facecolor('white')  # Fundo branco
+plt.gcf().set_facecolor('white')  # Área externa aos eixos em branco
+plt.tick_params(axis='x', colors='black') # Cor dos números do eixo x em preto
+plt.tick_params(axis='y', colors='black') # Cor dos números do eixo y em preto
+plt.xticks([1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11])
+plt.show()
